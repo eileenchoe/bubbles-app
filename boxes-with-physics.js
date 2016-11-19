@@ -4,6 +4,7 @@
      * Tracks a box as it is rubberbanded or moved across the drawing area.
      */
     let trackDrag = (event) => {
+      // when in draw, trackDrag renders the box with varying size
         $.each(event.changedTouches, function (index, touch) {
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
@@ -26,6 +27,7 @@
      * Concludes a drawing or moving sequence.
      */
     let endDrag = (event) => {
+      // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
@@ -40,10 +42,25 @@
      */
     let unhighlight = (event) => $(event.currentTarget).removeClass("box-highlight");
 
+
+    /*let startDraw = (event) => {
+      //this.anchorX = event.pageX;
+      //this.anchorY = event.pageY;
+      $.each(event.changedTouches, (index, touch) => {
+        touch.target = $("<div></div>")
+            .appendTo(this)
+            .addClass("circle")
+            .offset({ left: event.pageX, top: event.pageY });
+          }
+    }*/
+
+
     /**
      * Begins a box move sequence.
      */
     let startMove = (event) => {
+      // If no touch target, then in draw state
+
         $.each(event.changedTouches, (index, touch) => {
             // Highlight the element.
             $(touch.target).addClass("box-highlight");
@@ -90,7 +107,7 @@
             return;
         }
 
-        $("div.box").each((index, element) => {
+        $("div.circle").each((index, element) => {
             let $element = $(element);
 
             // If it's highlighted, we don't accelerate it because it is under a finger.
@@ -153,9 +170,11 @@
             .each((index, element) => {
                 element.addEventListener("touchmove", trackDrag, false);
                 element.addEventListener("touchend", endDrag, false);
+                // element.addEventListener("touchstart", startDraw, false);
+                // element.addEventListener("touchend", endDraw, false);
             })
 
-            .find("div.box").each((index, element) => {
+            .find("div.circle").each((index, element) => {
                 element.addEventListener("touchstart", startMove, false);
                 element.addEventListener("touchend", unhighlight, false);
 
@@ -169,7 +188,7 @@
         // In this sample, device acceleration is the _sole_ determiner of a box's acceleration.
         window.ondevicemotion = (event) => {
             let a = event.accelerationIncludingGravity;
-            $("div.box").each((index, element) => {
+            $("div.circle").each((index, element) => {
                 $(element).data('acceleration', a);
             });
         };
