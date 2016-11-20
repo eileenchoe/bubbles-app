@@ -15,6 +15,11 @@
                     top: touch.pageY - touch.target.deltaY
                 };
 
+                if ((newPosition.left <= 25) && (newPosition.top <= 25)) {
+                    //alert("delete");
+                    touch.target.remove();
+                }
+
                 $(touch.target).data('position', newPosition);
                 touch.target.movingBox.offset(newPosition);
             }
@@ -28,6 +33,7 @@
      * Concludes a drawing or moving sequence.
      */
     let endDrag = (event) => {
+      // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
             if (touch.target.drawingCircle) {
               //.touchend(unhighlight)
@@ -35,6 +41,7 @@
               // All done.
               this.drawingCircle = null;
             }
+
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
@@ -47,6 +54,7 @@
      * Indicates that an element is unhighlighted.
      */
     let unhighlight = (event) => $(event.currentTarget).removeClass("box-highlight");
+
 
 
     let startDraw = (event) => {
@@ -62,11 +70,25 @@
         });
     }
 
-//.data("position", { left: 256, top: 256})
+    /*let startDraw = (event) => {
+      //this.anchorX = event.pageX;
+      //this.anchorY = event.pageY;
+      $.each(event.changedTouches, (index, touch) => {
+        touch.target = $("<div></div>")
+            .appendTo(this)
+            .addClass("circle")
+            .offset({ left: event.pageX, top: event.pageY });
+          }
+    }*/
+
+
+
     /**
      * Begins a box move sequence.
      */
     let startMove = (event) => {
+      // If no touch target, then in draw state
+
         $.each(event.changedTouches, (index, touch) => {
             // Highlight the element.
             $(touch.target).addClass("box-highlight");
@@ -176,7 +198,7 @@
             .each((index, element) => {
                 element.addEventListener("touchmove", trackDrag, false);
                 element.addEventListener("touchend", endDrag, false);
-                element.addEventListener("touchstart", startDraw, false);
+                // element.addEventListener("touchstart", startDraw, false);
                 // element.addEventListener("touchend", endDraw, false);
             })
 
