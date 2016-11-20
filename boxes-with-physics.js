@@ -20,6 +20,14 @@
                     touch.target.remove();
                 }
 
+                if ((newPosition.left <= 320 && newPosition.left >= 295) && (newPosition.top <= 50 && newPosition.top >= 0)) {
+                    $(touch.target).css("background","red");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 295) && (newPosition.top <= 90 && newPosition.top >= 60)) {
+                    $(touch.target).css("background", "orange");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 295) && (newPosition.top <= 140 && newPosition.top >= 110)) {
+                    $(touch.target).css("background", "yellow");
+                }
+
                 $(touch.target).data('position', newPosition);
                 touch.target.movingBox.offset(newPosition);
             }
@@ -198,7 +206,7 @@
             .each((index, element) => {
                 element.addEventListener("touchmove", trackDrag, false);
                 element.addEventListener("touchend", endDrag, false);
-                // element.addEventListener("touchstart", startDraw, false);
+                element.addEventListener("touchstart", startDraw, false);
                 // element.addEventListener("touchend", endDraw, false);
             })
 
