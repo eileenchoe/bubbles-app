@@ -69,9 +69,15 @@
         this.top = touch.pageY;
 
         this.drawingCircle = $("<div></div>")
-          .appendTo("#drawing-area")
+          .appendTo(".drawing-area")
           .addClass("circle")
           .offset({left: touch.pageX, top: touch.pageY})
+          /*.attr({
+            style: {
+              top: touch.pageY,
+              left: touch.pageX
+            }
+          })*/
           .data({
             position: {left: touch.pageX, top: touch.pageY},
             velocity: { x: 0, y: 0, z: 0 },
@@ -199,7 +205,7 @@
                 // element.addEventListener("touchend", endDraw, false);
             })
 
-            .find("div.circle").each((index, element) => {
+            .find(".circle").each((index, element) => {
                 element.addEventListener("touchstart", startMove, false);
                 element.addEventListener("touchend", unhighlight, false);
 
