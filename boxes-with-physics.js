@@ -20,12 +20,22 @@
                     touch.target.remove();
                 }
 
-                if ((newPosition.left <= 320 && newPosition.left >= 295) && (newPosition.top <= 50 && newPosition.top >= 0)) {
+                if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 50 && newPosition.top >= 0)) {
                     $(touch.target).css("background","red");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 295) && (newPosition.top <= 90 && newPosition.top >= 60)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 90 && newPosition.top >= 60)) {
                     $(touch.target).css("background", "orange");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 295) && (newPosition.top <= 140 && newPosition.top >= 110)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 140 && newPosition.top >= 110)) {
                     $(touch.target).css("background", "yellow");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 190 && newPosition.top >= 160)) {
+                    $(touch.target).css("background", "green");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 240 && newPosition.top >= 210)) {
+                    $(touch.target).css("background", "blue");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 290 && newPosition.top >= 260)) {
+                    $(touch.target).css("background", "purple");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 340 && newPosition.top >= 310)) {
+                    $(touch.target).css("background", "black");
+                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 390 && newPosition.top >= 360)) {
+                    $(touch.target).css("background", "white");
                 }
 
                 $(touch.target).data('position', newPosition);
