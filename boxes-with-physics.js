@@ -53,13 +53,17 @@
     let endDrag = (event) => {
       // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
+
             if (touch.target.drawingCircle) {
-              touchend(unhighlight)
-              touchstart(startMove);
+              alert("endcreate");
+              touch.target.drawingCircle
+                .touchstart(startMove)
+                .touchend(unhighlight);
               touch.target.drawingCircle = null;
             }
 
             if (touch.target.movingBox) {
+              // alert("end move");
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
                 touch.target.movingBox = null;
@@ -100,8 +104,7 @@
      * Begins a box move sequence.
      */
     let startMove = (event) => {
-      // If no touch target, then in draw state
-
+      // alert("trigger start move");
         $.each(event.changedTouches, (index, touch) => {
             // Highlight the element.
             $(touch.target).addClass("box-highlight");
@@ -212,7 +215,7 @@
                 element.addEventListener("touchmove", trackDrag, false);
                 element.addEventListener("touchend", endDrag, false);
                 element.addEventListener("touchstart", startDraw, false);
-                // element.addEventListener("touchend", endDraw, false);
+                element.addEventListener("touchleave", endDrag, false);
             })
 
             .find(".circle").each((index, element) => {
