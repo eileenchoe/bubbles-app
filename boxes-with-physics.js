@@ -36,10 +36,9 @@
       // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
             if (touch.target.drawingCircle) {
-              //.touchend(unhighlight)
-              ///.touchstart(startMove);
-              // All done.
-              this.drawingCircle = null;
+              touchend(unhighlight)
+              touchstart(startMove);
+              touch.target.drawingCircle = null;
             }
 
             if (touch.target.movingBox) {
@@ -55,8 +54,6 @@
      */
     let unhighlight = (event) => $(event.currentTarget).removeClass("box-highlight");
 
-
-
     let startDraw = (event) => {
       $.each(event.changedTouches, (index, touch) => {
         //alert(touch.target);
@@ -67,21 +64,13 @@
           .appendTo("#drawing-area")
           .addClass("circle")
           .offset({left: touch.pageX, top: touch.pageY})
+          .data({
+            position: {left: touch.pageX, top: touch.pageY},
+            velocity: { x: 0, y: 0, z: 0 },
+            acceleration: { x: 0, y: 0, z: 0 }
+          })
         });
     }
-
-    /*let startDraw = (event) => {
-      //this.anchorX = event.pageX;
-      //this.anchorY = event.pageY;
-      $.each(event.changedTouches, (index, touch) => {
-        touch.target = $("<div></div>")
-            .appendTo(this)
-            .addClass("circle")
-            .offset({ left: event.pageX, top: event.pageY });
-          }
-    }*/
-
-
 
     /**
      * Begins a box move sequence.
@@ -198,11 +187,11 @@
             .each((index, element) => {
                 element.addEventListener("touchmove", trackDrag, false);
                 element.addEventListener("touchend", endDrag, false);
-                // element.addEventListener("touchstart", startDraw, false);
+                element.addEventListener("touchstart", startDraw, false);
                 // element.addEventListener("touchend", endDraw, false);
             })
 
-            .find(".circle").each((index, element) => {
+            .find("div.circle").each((index, element) => {
                 element.addEventListener("touchstart", startMove, false);
                 element.addEventListener("touchend", unhighlight, false);
 
