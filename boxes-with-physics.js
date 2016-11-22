@@ -1,6 +1,7 @@
 (($) => {
     var timer = 0;
     var currentScale = 1;
+    var bubbles = { };
 
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
@@ -59,6 +60,7 @@
             if (touch.target.drawingCircle) {
                 // console.log("endcreate");
                 touch.target.drawingCircle
+                    .removeClass("box-highlight")
                     .bind("touchstart", startMove)
                     .bind("touchend", unhighlight);
                 touch.target.drawingCircle = null;
@@ -72,6 +74,7 @@
         });
 
         if (timer) {
+          //alert("here");
             clearInterval(timer);
             currentScale = 1;
             timer = 0;
@@ -91,23 +94,26 @@
         touch.target.drawingCircle = $("<div></div>")
           .appendTo(".drawing-area")
           .addClass("circle")
-          .offset({left: this.left, top: this.right})
+          .addClass("box-highlight")
+          .offset({left: touch.pageX, top: touch.pageY})
           .data({
             position: {left: touch.pageX, top: touch.pageY},
             velocity: { x: 0, y: 0, z: 0 },
             acceleration: { x: 0, y: 0, z: 0 }
           })
 
-        timer = setInterval(function () {
-            currentScale = ++currentScale%60;
-            $(touch.target.drawingCircle).css({"height":  75 + currentScale*10, "width": 75 + currentScale*10});
-            // if the circle reaches width and height of 345, stop the bubble from growing
-            // this immediately jumps to (345, 345) and stops the bubble from growing
-            // need to fix it so it gradually gets to that point and then stops growing
-            // if ((touch.target.drawingCircle).css({"height": 345, "width": 345})) {
-            //     startDraw.stop();
-            // }
-        }, 200);
+        bubbles [touch.identifier] = touch.target.drawingCircle;
+
+        bubbleState = bubbles[touch.identifier];
+        if (bubbleState) {
+          timer = setInterval(function () {
+            currentScale = ++ currentScale % 60;
+            $(bubbleState).css({"height":  75 + currentScale*10, "width": 75 + currentScale*10});
+            if (currentScale > 25) {
+              currentScale = 25;
+            };
+          }, 200);
+        }
 
         });
     }
