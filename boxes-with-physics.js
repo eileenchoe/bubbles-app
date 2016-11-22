@@ -56,15 +56,14 @@
 
 
             if (touch.target.drawingCircle) {
-              console.log("endcreate");
-              touch.target.drawingCircle
-                  .bind("touchstart", startMove)
-                  .bind("touchend", unhighlight);
-              touch.target.drawingCircle = null;
+                // console.log("endcreate");
+                touch.target.drawingCircle
+                    .bind("touchstart", startMove)
+                    .bind("touchend", unhighlight);
+                touch.target.drawingCircle = null;
             }
 
             if (touch.target.movingBox) {
-              // alert("end move");
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
                 touch.target.movingBox = null;
@@ -79,7 +78,6 @@
 
     let startDraw = (event) => {
       $.each(event.changedTouches, (index, touch) => {
-        //alert(touch.target);
         this.left = touch.pageX;
         this.top = touch.pageY;
 
@@ -87,12 +85,6 @@
           .appendTo(".drawing-area")
           .addClass("circle")
           .offset({left: this.left, top: this.right})
-          /*.attr({
-            style: {
-              top: touch.pageY,
-              left: touch.pageX
-            }
-          })*/
           .data({
             position: {left: touch.pageX, top: touch.pageY},
             velocity: { x: 0, y: 0, z: 0 },
