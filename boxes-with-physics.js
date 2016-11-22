@@ -91,6 +91,17 @@
             velocity: { x: 0, y: 0, z: 0 },
             acceleration: { x: 0, y: 0, z: 0 }
           })
+
+          var sec = -1;
+          //function pad(val) { return val; }
+          setInterval(function () {
+		          sec = ++sec%60;
+              $(touch.target.drawingCircle).css({"height":  75 + sec*10, "width": 75 + sec*10});
+              //console.log(sec);
+          }, 200);
+
+          //$(touch.target.drawingCircle).css({"height":  200, "width": 200});
+          //alert($(touch.target.drawingCircle).css("height") + $(touch.target.drawingCircle).css("width"));
         });
     }
 
