@@ -53,8 +53,6 @@
     let endDrag = (event) => {
       // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
-
-
             if (touch.target.drawingCircle) {
                 // console.log("endcreate");
                 touch.target.drawingCircle
@@ -80,6 +78,9 @@
       $.each(event.changedTouches, (index, touch) => {
         this.left = touch.pageX;
         this.top = touch.pageY;
+        var longTouch;
+        var timer;
+        var touchDuration = 3000;
 
         touch.target.drawingCircle = $("<div></div>")
           .appendTo(".drawing-area")
