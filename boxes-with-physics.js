@@ -54,11 +54,12 @@
       // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
 
+
             if (touch.target.drawingCircle) {
-              alert("endcreate");
+              console.log("endcreate");
               touch.target.drawingCircle
-                .touchstart(startMove)
-                .touchend(unhighlight);
+                  .bind("touchstart", startMove)
+                  .bind("touchend", unhighlight);
               touch.target.drawingCircle = null;
             }
 
@@ -82,7 +83,7 @@
         this.left = touch.pageX;
         this.top = touch.pageY;
 
-        this.drawingCircle = $("<div></div>")
+        touch.target.drawingCircle = $("<div></div>")
           .appendTo(".drawing-area")
           .addClass("circle")
           .offset({left: this.left, top: this.right})
