@@ -10,6 +10,11 @@
     position: absolute;
 }
 
+.squared {
+    border: white;
+    position: absolute;
+}
+
 .circle{
   border-radius: 50%;
   width: 75px;
