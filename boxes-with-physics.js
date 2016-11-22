@@ -101,6 +101,12 @@
         timer = setInterval(function () {
             currentScale = ++currentScale%60;
             $(touch.target.drawingCircle).css({"height":  75 + currentScale*10, "width": 75 + currentScale*10});
+            // if the circle reaches width and height of 345, stop the bubble from growing
+            // this immediately jumps to (345, 345) and stops the bubble from growing
+            // need to fix it so it gradually gets to that point and then stops growing
+            // if ((touch.target.drawingCircle).css({"height": 345, "width": 345})) {
+            //     startDraw.stop();
+            // }
         }, 200);
 
         });
