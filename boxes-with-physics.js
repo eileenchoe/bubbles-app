@@ -85,7 +85,7 @@
         this.drawingCircle = $("<div></div>")
           .appendTo(".drawing-area")
           .addClass("circle")
-          .offset({left: touch.pageX, top: touch.pageY})
+          .offset({left: this.left, top: this.right})
           /*.attr({
             style: {
               top: touch.pageY,
