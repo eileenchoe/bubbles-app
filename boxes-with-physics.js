@@ -1,4 +1,7 @@
 (($) => {
+    var timer = 0;
+    var currentScale = 1;
+
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
      */
@@ -67,6 +70,12 @@
                 touch.target.movingBox = null;
             }
         });
+
+        if (timer) {
+            clearInterval(timer);
+            currentScale = 1;
+            timer = 0;
+        }
     };
 
     /**
@@ -78,9 +87,6 @@
       $.each(event.changedTouches, (index, touch) => {
         this.left = touch.pageX;
         this.top = touch.pageY;
-        var longTouch;
-        var timer;
-        var touchDuration = 3000;
 
         touch.target.drawingCircle = $("<div></div>")
           .appendTo(".drawing-area")
@@ -92,16 +98,11 @@
             acceleration: { x: 0, y: 0, z: 0 }
           })
 
-          var sec = -1;
-          //function pad(val) { return val; }
-          setInterval(function () {
-		          sec = ++sec%60;
-              $(touch.target.drawingCircle).css({"height":  75 + sec*10, "width": 75 + sec*10});
-              //console.log(sec);
-          }, 200);
+        timer = setInterval(function () {
+            currentScale = ++currentScale%60;
+            $(touch.target.drawingCircle).css({"height":  75 + currentScale*10, "width": 75 + currentScale*10});
+        }, 200);
 
-          //$(touch.target.drawingCircle).css({"height":  200, "width": 200});
-          //alert($(touch.target.drawingCircle).css("height") + $(touch.target.drawingCircle).css("width"));
         });
     }
 
