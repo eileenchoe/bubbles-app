@@ -1,6 +1,6 @@
 (($) => {
-    var timer = 0;
-    var currentScale = 1;
+    // var timer = 0;
+    // var currentScale = 1;
     var bubbles = { };
 
     /**
@@ -21,7 +21,9 @@
 
                 if ((newPosition.left <= 25) && (newPosition.top <= 25)) {
                     //alert("delete");
+                    // $(".pop").attr("disabled", "enabled");
                     touch.target.remove();
+                    // $("#test *").attr("disabled", "disabled").off('click');
                 }
 
                 if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 50 && newPosition.top >= 0)) {
@@ -55,30 +57,25 @@
      * Concludes a drawing or moving sequence.
      */
     let endDrag = (event) => {
-      // when endDragging after draw, then release
         $.each(event.changedTouches, (index, touch) => {
-            if (touch.target.drawingCircle) {
-                // console.log("endcreate");
-                touch.target.drawingCircle
-                    .removeClass("box-highlight")
-                    .bind("touchstart", startMove)
-                    .bind("touchend", unhighlight);
-                touch.target.drawingCircle = null;
+            let bubble = bubbles[touch.identifier];
+            if (bubble && bubble.circle) {
+              console.log("triggerEndDraw");
+              if (bubbles[touch.identifier]) {
+                console.log("deleting timer");
+                clearInterval(bubbles[touch.identifier].timer);
+              }
+              bubble.circle
+                .removeClass("box-highlight")
+                .bind("touchstart", startMove)
+                .bind("touchend", unhighlight);
+              delete(bubbles[touch.identifier]);
             }
-
             if (touch.target.movingBox) {
-                // Change state to "not-moving-anything" by clearing out
-                // touch.target.movingBox.
-                touch.target.movingBox = null;
+              touch.target.movingBox = null;
             }
         });
-
-        if (timer) {
-          //alert("here");
-            clearInterval(timer);
-            currentScale = 1;
-            timer = 0;
-        }
+        event.preventDefault();
     };
 
     /**
@@ -91,32 +88,37 @@
         this.left = touch.pageX;
         this.top = touch.pageY;
 
-        touch.target.drawingCircle = $("<div></div>")
-          .appendTo(".drawing-area")
-          .addClass("circle")
-          .addClass("box-highlight")
-          .offset({left: touch.pageX, top: touch.pageY})
-          .data({
-            position: {left: touch.pageX, top: touch.pageY},
-            velocity: { x: 0, y: 0, z: 0 },
-            acceleration: { x: 0, y: 0, z: 0 }
-          })
+        bubbles[touch.identifier] = {
+          circle : $("<div></div>")
+            .appendTo(".drawing-area")
+            .addClass("circle")
+            .addClass("box-highlight")
+            .offset({left: touch.pageX, top: touch.pageY})
+            .data({
+              position: {left: touch.pageX, top: touch.pageY},
+              velocity: { x: 0, y: 0, z: 0 },
+              acceleration: { x: 0, y: 0, z: 0 }
+            }),
+          timer: 0,
+          currentScale : 0
+        }
 
-        bubbles [touch.identifier] = touch.target.drawingCircle;
+        let bubbleState = bubbles[touch.identifier];
 
-        bubbleState = bubbles[touch.identifier];
         if (bubbleState) {
-          timer = setInterval(function () {
-            currentScale = ++ currentScale % 60;
-            $(bubbleState).css({"height":  75 + currentScale*10, "width": 75 + currentScale*10});
-            if (currentScale > 25) {
-              currentScale = 25;
+          bubbleState.timer = setInterval(function () {
+            bubbleState.currentScale = ++ bubbleState.currentScale % 60;
+            $(bubbleState.circle).css({"height":  75 + bubbleState.currentScale * 10, "width": 75 + bubbleState.currentScale * 10});
+            if (bubbleState.currentScale > 25) {
+              bubbleState.currentScale = 25;
             };
           }, 200);
         }
-
-        });
+      });
+      console.log(bubbles);
+      event.preventDefault();
     }
+
 
     /**
      * Begins a box move sequence.
@@ -147,6 +149,7 @@
         // Eat up the event so that the drawing area does not
         // deal with it.
         event.stopPropagation();
+        event.preventDefault();
     };
 
     /**
