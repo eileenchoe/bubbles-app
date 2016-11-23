@@ -1,55 +1,47 @@
 (($) => {
-    // var timer = 0;
-    // var currentScale = 1;
     var bubbles = { };
 
     /**
-     * Tracks a box as it is rubberbanded or moved across the drawing area.
+     * Tracks a bubble as it is rubberbanded or moved across the drawing area.
      */
     let trackDrag = (event) => {
-      // when in draw, trackDrag renders the box with varying size
+      // when in draw, trackDrag renders the bubble with varying size
         $.each(event.changedTouches, function (index, touch) {
-            // Don't bother if we aren't tracking anything.
-            if (touch.target.movingBox) {
-
-
+            if (touch.target.movingBubble) {
                 // Reposition the object.
                 let newPosition = {
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
                 };
 
+                // Delete a bubble
                 if ((newPosition.left <= 25) && (newPosition.top <= 25)) {
-                    //alert("delete");
-                    // $(".pop").attr("disabled", "enabled");
                     touch.target.remove();
-                    // $("#test *").attr("disabled", "disabled").off('click');
                 }
 
-                if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 50 && newPosition.top >= 0)) {
+                // Color the bubbles
+                if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 50 && newPosition.top >= 0)) {
                     $(touch.target).css("background","red");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 90 && newPosition.top >= 60)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 90 && newPosition.top >= 60)) {
                     $(touch.target).css("background", "orange");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 140 && newPosition.top >= 110)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 140 && newPosition.top >= 110)) {
                     $(touch.target).css("background", "yellow");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 190 && newPosition.top >= 160)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 190 && newPosition.top >= 160)) {
                     $(touch.target).css("background", "green");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 240 && newPosition.top >= 210)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 240 && newPosition.top >= 210)) {
                     $(touch.target).css("background", "blue");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 290 && newPosition.top >= 260)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 290 && newPosition.top >= 260)) {
                     $(touch.target).css("background", "purple");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 340 && newPosition.top >= 310)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 340 && newPosition.top >= 310)) {
                     $(touch.target).css("background", "black");
-                } else if ((newPosition.left <= 320 && newPosition.left >= 250) && (newPosition.top <= 390 && newPosition.top >= 360)) {
+                } else if ((newPosition.left <= 320 && newPosition.left >= 200) && (newPosition.top <= 390 && newPosition.top >= 360)) {
                     $(touch.target).css("background", "white");
                 }
 
                 $(touch.target).data('position', newPosition);
-                touch.target.movingBox.offset(newPosition);
+                touch.target.movingBubble.offset(newPosition);
             }
         });
-
-        // Don't do any touch scrolling.
         event.preventDefault();
     };
 
@@ -66,13 +58,13 @@
                 clearInterval(bubbles[touch.identifier].timer);
               }
               bubble.circle
-                .removeClass("box-highlight")
+                .removeClass("bubble-highlight")
                 .bind("touchstart", startMove)
                 .bind("touchend", unhighlight);
               delete(bubbles[touch.identifier]);
             }
-            if (touch.target.movingBox) {
-              touch.target.movingBox = null;
+            if (touch.target.movingBubble) {
+              touch.target.movingBubble = null;
             }
         });
         event.preventDefault();
@@ -81,7 +73,7 @@
     /**
      * Indicates that an element is unhighlighted.
      */
-    let unhighlight = (event) => $(event.currentTarget).removeClass("box-highlight");
+    let unhighlight = (event) => $(event.currentTarget).removeClass("bubble-highlight");
 
     let startDraw = (event) => {
       $.each(event.changedTouches, (index, touch) => {
@@ -92,7 +84,7 @@
           circle : $("<div></div>")
             .appendTo(".drawing-area")
             .addClass("circle")
-            .addClass("box-highlight")
+            .addClass("bubble-highlight")
             .offset({left: touch.pageX, top: touch.pageY})
             .data({
               position: {left: touch.pageX, top: touch.pageY},
@@ -119,17 +111,16 @@
       event.preventDefault();
     }
 
-
     /**
-     * Begins a box move sequence.
+     * Begins a bubble move sequence.
      */
     let startMove = (event) => {
       // alert("trigger start move");
         $.each(event.changedTouches, (index, touch) => {
             // Highlight the element.
-            $(touch.target).addClass("box-highlight");
+            $(touch.target).addClass("bubble-highlight");
 
-            // Take note of the box's current (global) location. Also, set its velocity and acceleration to
+            // Take note of the bubble's current (global) location. Also, set its velocity and acceleration to
             // nothing because, well, _finger_.
             let jThis = $(touch.target);
             let startOffset = jThis.offset();
@@ -141,7 +132,7 @@
 
             // Set the drawing area's state to indicate that it is
             // in the middle of a move.
-            touch.target.movingBox = jThis;
+            touch.target.movingBubble = jThis;
             touch.target.deltaX = touch.pageX - startOffset.left;
             touch.target.deltaY = touch.pageY - startOffset.top;
         });
@@ -161,22 +152,21 @@
     const FRAME_DURATION = 1000 / FRAME_RATE;
 
     let lastTimestamp = 0;
-    let updateBoxes = (timestamp) => {
+    let updateBubbles = (timestamp) => {
         if (!lastTimestamp) {
             lastTimestamp = timestamp;
         }
 
         // Keep that frame rate under control.
         if (timestamp - lastTimestamp < FRAME_DURATION) {
-            window.requestAnimationFrame(updateBoxes);
+            window.requestAnimationFrame(updateBubbles);
             return;
         }
 
         $(".circle").each((index, element) => {
             let $element = $(element);
-
             // If it's highlighted, we don't accelerate it because it is under a finger.
-            if ($element.hasClass("box-highlight")) {
+            if ($element.hasClass("bubble-highlight")) {
                 return;
             }
 
@@ -209,24 +199,22 @@
                 s.left = (s.left <= bounds.left) ? bounds.left : bounds.right - $element.width();
                 v.x = -v.x;
             }
-
             if ((s.top <= bounds.top) || (s.top + $element.height() > bounds.bottom)) {
                 s.top = (s.top <= bounds.top) ? bounds.top : bounds.bottom - $element.height();
                 v.y = -v.y;
             }
-
             $(element).offset(s);
         });
 
         lastTimestamp = timestamp;
-        window.requestAnimationFrame(updateBoxes);
+        window.requestAnimationFrame(updateBubbles);
     };
 
     /**
      * Sets up the given jQuery collection as the drawing area(s).
      */
     let setDrawingArea = (jQueryElements) => {
-        // Set up any pre-existing box elements for touch behavior.
+        // Set up any pre-existing bubble elements for touch behavior.
         jQueryElements
             .addClass("drawing-area")
 
@@ -250,20 +238,19 @@
                 });
             });
 
-        // In this sample, device acceleration is the _sole_ determiner of a box's acceleration.
+        // In this sample, device acceleration is the _sole_ determiner of a bubble's acceleration.
         window.ondevicemotion = (event) => {
             let a = event.accelerationIncludingGravity;
             $(".circle").each((index, element) => {
                 $(element).data('acceleration', a);
             });
         };
-
         // Start the animation sequence.
-        window.requestAnimationFrame(updateBoxes);
+        window.requestAnimationFrame(updateBubbles);
     };
 
     // No arrow function here because we don't want lexical scoping.
-    $.fn.boxesWithPhysics = function () {
+    $.fn.bubblesWithPhysics = function () {
         setDrawingArea(this);
         return this;
     };

@@ -1,4 +1,9 @@
 /* Drawing area properties. */
+#title{
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+}
+
 .drawing-area {
     position: relative;
     user-select: none;
@@ -11,11 +16,15 @@
 }
 
 .square {
+    left:20px;
+    top: 20px;
     border: white;
     position: absolute;
 }
 
 .pop {
+  left: 20px;
+  top: 100px;
   border: white;
   position: absolute;
 }
@@ -29,6 +38,6 @@
   position: absolute;
 }
 
-.box-highlight {
+.bubble-highlight {
     box-shadow: 0px 0px 6px #88F;
 }

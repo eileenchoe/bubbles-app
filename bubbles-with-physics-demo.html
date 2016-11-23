@@ -9,17 +9,17 @@
     <meta name="viewport" content="width=device-width" />
 
     <title>Direct Manipulation on a Web Page: Physics Version</title>
-    <link rel="stylesheet" type="text/css" href="boxes-with-physics.css"/>
+    <link rel="stylesheet" type="text/css" href="bubbles-with-physics.css"/>
 
     <!-- Styles that are totally specific to this page. -->
-    <link rel="stylesheet" type="text/css" href="boxes-with-physics-demo.css"/>
+    <link rel="stylesheet" type="text/css" href="bubbles-with-physics-demo.css"/>
   </head>
 
   <body>
-    <!-- "Pre-load" the drawing area with a couple of boxes.
-         Inline style attributes are OK here since they are
-         manually set when done in code anyway. -->
     <div id="drawing-area">
+      <div id="title">
+        <h1>zen bubbles!</h1>
+      </div>
       <div class="circle"
           style="left: 256px; top: 256px">
       </div>
@@ -29,13 +29,11 @@
       <div class="circle"
           style="left: 120px; top: 384px">
       </div>
-      <div class="square"
-          <id="picture">
+      <div class="square" id="picture">
             <img src="pushpin.png" height="60px" width="60px">
       </div>
-      <div class="pop" disabled style="left: 50px; top: 50px">
+      <div class="pop">
         <img src="pop.jpg" height="70px" width="70px">
-
       </div>
       <div class="box"
           style="width: 30px; height: 30px; left: 310px; top:10px; background: red">
@@ -63,14 +61,10 @@
       </div>
     </div>
 
-
-    <!-- Load up jQuery first. -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-    <!-- Load up the controller code. -->
-    <script src="boxes-with-physics.js"></script>
+    <script src="bubbles-with-physics.js"></script>
 
-    <!-- Code that is totally specific to this page. -->
-    <script src="boxes-with-physics-demo.js"></script>
+    <script src="bubbles-with-physics-demo.js"></script>
   </body>
 </html>
